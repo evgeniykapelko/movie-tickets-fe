@@ -1,84 +1,89 @@
-import React, { useState } from "react";
-import Input from "../form/input";
+import { useState } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
+import Input from "../form/input";
 
 export const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
-  const { setJwtToken } = useOutletContext();
-  const { setAlertMessage } = useOutletContext();
-  const { setAlertClassName } = useOutletContext();
-  const { toggleRefresh } = useOutletContext()
-  const navigate = useNavigate();
+    const { setJwtToken } = useOutletContext();
+    const { setAlertClassName } = useOutletContext();
+    const { setAlertMessage } = useOutletContext();
+    const { toggleRefresh } = useOutletContext();
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+    const navigate = useNavigate();
 
-    // build the request payload
-    let payload = {
-      email: email,
-      password: password
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        
+        let payload = {
+            email: email,
+            password: password,
+        }
+
+        const requestOptions = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify(payload),
+        }
+
+        fetch(`http://localhost:8088/authenticate`, requestOptions)
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.error) {
+                    setAlertClassName("alert-danger");
+                    setAlertMessage(data.message);
+                } else {
+                    setJwtToken(data.access_token);
+                    setAlertClassName("d-none");
+                    setAlertMessage("");
+                    toggleRefresh(true);
+                    navigate("/");
+                }
+            })
+            .catch(error => {
+                setAlertClassName("alert-danger");
+                setAlertMessage(error.message);
+            })
     }
 
-    const requestOptions = {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      credentials: 'include',
-      body: JSON.stringify(payload),
-    }
+    return(
+        <div className="col-md-6 offset-md-3">
+            <h2>Login</h2>
+            <hr />
 
-    fetch(`/authenticate`, requestOptions)
-        .then((response) => response.json())
-        .then((data) => {
-            if (data.error) {
-              setAlertClassName("alert-danger");
-              setAlertMessage(data.messages);
-            } else {
-              setJwtToken(data.access_token);
-              setAlertClassName("d-none");
-              setAlertMessage("");
-              toggleRefresh(true)
-              navigate("/");
-            }
-        })
-        .catch(error => {
-          setAlertClassName("alert-danger");
-          setAlertMessage(error)
-        })
-  }
+            <form onSubmit={handleSubmit}>
+                <Input
+                    title="Email Address"
+                    type="email"
+                    className="form-control"
+                    name="email"
+                    autoComplete="email-new"
+                    onChange={(event) => setEmail(event.target.value)}
+                />
 
-  return <div>
-    <h2>Login</h2>
-    <hr />
-    <form onSubmit={handleSubmit} >
-      <Input 
-        title="Email Address"
-        type="email"
-        className="form-control"
-        name="email"
-        autoComplete="email-new"
-        onChange={(event) => setEmail(event.target.value)}
-      />
+                <Input
+                    title="Password"
+                    type="password"
+                    className="form-control"
+                    name="password"
+                    autoComplete="password-new"
+                    onChange={(event) => setPassword(event.target.value)}
+                />
 
-      <Input 
-        title="Password"
-        type="password"
-        className="form-control"
-        name="password"
-        autoComplete="password-new"
-        onChange={(event) => setEmail(event.target.value)}
-      />
+                <hr />
 
-      <hr />
+                <input 
+                    type="submit"
+                    className="btn btn-primary"
+                    value="Login"
+                />
 
-      <input 
-        type="submit"
-        className="btn btn-primary"
-        value="Login"
-      />
-    </form>
-  </div>;
-};
+
+            </form>
+        </div>
+    )
+}

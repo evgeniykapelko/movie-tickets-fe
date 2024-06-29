@@ -7,7 +7,7 @@ const TextArea = forwardRef((props, ref) => {
                 {props.title}
             </label>
             <textarea
-                className={props.className}
+                className="form-control"
                 id={props.name}
                 ref={ref}
                 name={props.name}

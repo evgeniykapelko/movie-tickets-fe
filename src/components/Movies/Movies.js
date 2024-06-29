@@ -14,7 +14,7 @@ export const Movies = () => {
       headers
     }
 
-    fetch(`http://localhost:8085/movies`, requestOptions)
+    fetch(`http://localhost:8088/movies`, requestOptions)
       .then((res) => res.json())
       .then((data) => {
         setMovies(data);
