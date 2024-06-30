@@ -101,7 +101,7 @@ export const EditMovie = () => {
                 headers: headers,
             }
 
-            fetch(`/admin/movies/${id}`, requestOptions)
+            fetch(`http://localhost:8088/admin/movies/${id}`, requestOptions)
                 .then((response) => {
                     if (response.status !== 200) {
                         setError("Invalid response code: " + response.status)
@@ -136,7 +136,7 @@ export const EditMovie = () => {
                     })
 
                     setMovie({
-                        ...date.movie,
+                        ...data.movie,
                         genres: checks,
                     })
                 })
@@ -227,6 +227,40 @@ export const EditMovie = () => {
         })
     }
 
+    const confirmDelete = () => {
+        Swal.fire({
+            title: "Delete movie?",
+            text: "You cannot undo this action!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+          }).then((result) => {
+            if (result.isConfirmed) {
+                let headers = new Headers();
+
+                headers.append("Authorization", "Bearer " + jwtToken);
+
+                const requestOptions = {
+                    method: "DELETE",
+                    headers: headers
+                };
+
+                fetch(`/admin/movies/${movie.id}`, requestOptions)
+                    .then((response) => response.json())
+                    .then((data) => {
+                        if (data.error) {
+                            console.log(data.error)
+                        } else {
+                            navigate("/manage-catalogue");
+                        }
+                    })
+                    .catch(err => console.log(err));
+            }
+          });
+    }
+
     const handleCheck = (event, position) => {
         console.log("handleCheck called")
         console.log("value in handleCheck:", event.target.value)
@@ -249,6 +283,10 @@ export const EditMovie = () => {
             ...movie,
             genres_array: tmpIDs,
         })
+    }
+
+    if (error !== null) {
+        return <div>Error: {error.message}</div>;
     }
 
     return (
@@ -338,6 +376,9 @@ export const EditMovie = () => {
 
                 <button className="btn btn-primary">Save</button>
 
+                {movie.id > 0 &&
+                    <a href="#!" className="btn btn-danger ms2" onClick={confirmDelete}>Delete Movie</a>
+                }
             </form>
         </div>
     )
