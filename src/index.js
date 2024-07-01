@@ -11,6 +11,7 @@ import { EditMovie } from './components/EditMovie/EditMovie';
 import { ManageCatalogue } from './components/ManageCatalogue/ManageCatalogue';
 import { GraphQL } from './components/GraphQL/GraphQL';
 import { Login } from './components/Login/Login';
+import { OneGenre } from './components/OneGenre/OneGenre';
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
       {
         path: "/genres",
         element: <Genres />,
+      },
+      {
+        path: "/genres/:id",
+        element: <OneGenre />,
       },
       {
         path: "/admin/movie/0",
