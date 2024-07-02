@@ -24,7 +24,7 @@ export const Genres = () => {
                 }
             })
             .catch(err => console.log(err))
-    })
+    }, [])
 
     if (error !== null) {
         return <div>Error: {error.message}</div>
