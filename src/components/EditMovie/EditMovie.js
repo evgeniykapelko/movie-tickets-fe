@@ -68,7 +68,7 @@ export const EditMovie = () => {
                 method: "GET",
                 headers: headers,
             }
-            fetch(`http://localhost:8088/genres`, requestOptions)
+            fetch(`${process.env.REACT_APP_BACKEND}/genres`, requestOptions)
                 .then((response) => response.json())
                 .then((data) => {
                     const checks = [];
@@ -101,7 +101,7 @@ export const EditMovie = () => {
                 headers: headers,
             }
 
-            fetch(`http://localhost:8088/admin/movies/${id}`, requestOptions)
+            fetch(`${process.env.REACT_APP_BACKEND}/admin/movies/${id}`, requestOptions)
                 .then((response) => {
                     if (response.status !== 200) {
                         setError("Invalid response code: " + response.status)
@@ -203,7 +203,7 @@ export const EditMovie = () => {
             credentials: "include",
         }
 
-        fetch(`http://localhost:8088/admin/movies/${movie.id}`, requestOptions)
+        fetch(`${process.env.REACT_APP_BACKEND}/admin/movies/${movie.id}`, requestOptions)
             .then((response) => response.json())
             .then((data) => {
                 if (data.error) {
@@ -247,7 +247,7 @@ export const EditMovie = () => {
                     headers: headers
                 };
 
-                fetch(`/admin/movies/${movie.id}`, requestOptions)
+                fetch(`${process.env.REACT_APP_BACKEND}/admin/movies/${movie.id}`, requestOptions)
                     .then((response) => response.json())
                     .then((data) => {
                         if (data.error) {

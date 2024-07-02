@@ -1,4 +1,5 @@
-import { Link, useLocation } from "react-router-dom"
+import { useState, useEffect } from "react";
+import { Link, useLocation, useParams } from "react-router-dom"
 
 export const OneGenre = () => {
     const location = useLocation();
@@ -17,7 +18,7 @@ export const OneGenre = () => {
             headers: headers,
         }
 
-        fetch(`/movies/genres/${id}`, requestOptions)
+        fetch(`${process.env.REACT_APP_BACKEND}/movies/genres/${id}`, requestOptions)
             .then((response) => response.json())
             .then((data) => {
                 if (data.error) {

@@ -14,7 +14,7 @@ export const Movie = () => {
         headers: headers,
     }
 
-    fetch(`http://localhost:8088/movies/${id}`, requestOptions)
+    fetch(`${process.env.REACT_APP_BACKEND}/movies/${id}`, requestOptions)
         .then((response) => response.json())
         .then((data) => {
             setMovie(data);

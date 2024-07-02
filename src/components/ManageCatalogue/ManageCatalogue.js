@@ -21,7 +21,7 @@ export const ManageCatalogue = () => {
       headers
     }
 
-    fetch(`/admin/movies`, requestOptions)
+    fetch(`${process.env.REACT_APP_BACKEND}/admin/movies`, requestOptions)
       .then((res) => res.json())
       .then((data) => {
         setMovies(data);

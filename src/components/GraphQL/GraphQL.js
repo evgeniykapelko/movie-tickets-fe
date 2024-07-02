@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Input from '../form/input';
 import { Link } from "react-router-dom";
 
@@ -30,7 +30,7 @@ export const GraphQL = () => {
             headers: headers
         }
 
-        fetch(`/graph`, requestOptions)
+        fetch(`${process.env.REACT_APP_BACKEND}/graph`, requestOptions)
             .then((response) => response.json())
             .then((response) => {
                 let theList = Object.values(response.data.search);
@@ -73,7 +73,7 @@ export const GraphQL = () => {
             body: payload,
         };
 
-        fetch(`/graph`, requestOptions)
+        fetch(`${process.env.REACT_APP_BACKEND}/graph`, requestOptions)
             .then((response) => response.json())
             .then((response) => {
                 let theList = Object.values(response.data.list);
