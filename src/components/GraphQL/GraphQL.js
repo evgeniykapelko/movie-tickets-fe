@@ -9,12 +9,47 @@ export const GraphQL = () => {
     const [fullList, setFullList] = useState([]);
 
     const performSearch = () => {
+        const payload = `
+        {
+            search(titleContains: "${searchTerm}") {
+                id
+                title
+                runtime
+                release_date
+                mpaa_rating
+            }
+        }`;
 
-    
+        const headers = new Headers();
+
+        headers.append("Content-Type", "application/graphql");
+
+        const requestOptions = {
+            method: "POST",
+            body: payload,
+            headers: headers
+        }
+
+        fetch(`/graph`, requestOptions)
+            .then((response) => response.json())
+            .then((response) => {
+                let theList = Object.values(response.data.search);
+                setMovies(theList);
+            })
+            .catch(err => console.log(err))
     }
 
     const handleChange = (event) => {
+        event.preventDefault();
 
+        let value = event.target.value;
+        setSearchTerm(value);
+
+        if (value.length > 2) {
+            performSearch();
+        } else {
+            setMovies(fullList);
+        }
     }
 
     useEffect(() => {
